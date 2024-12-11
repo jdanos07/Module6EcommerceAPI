@@ -1,25 +1,30 @@
+from app import db, CustomerAccount, Customers, customer_schema, customers_schema, sch
+from flask import request, jsonify
+from marshmallow import ValidationError
+
 def get_customers():
-    workouts = Workouts.query.all()
-    return workouts_schema.jsonify(workouts)
+    customers = Customers.query.all()
+    return customers_schema.jsonify(customers)
 
 def get_customer(customer_id):
-    pass
+    customer = Customers.query.find_all(customer_id)
+    return customer_schema.jsonify(customer)
 
 def add_customer():
-    pass
-    # try:
-    #     workout_data = workout_schema.load(request.json)
-    # except ValidationError as e:
-    #     return jsonify(e.messages),400
+    try:
+        customer_info = customer_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages),400
 
-    # new_workout = Workouts(
-    #     calories_burned = workout_data['calories_burned'],
-    #     duration_minutes = workout_data['duration_minutes'],
-    #     date = workout_data['date']
-    #     )
-    # db.session.add(new_workout)
-    # db.session.commit()
-    # return jsonify({'message': 'New member added successfuly'}), 201
+    new_customer = Customers(
+        customer_name = customer_info('customer_name'),
+        email = customer_info('email'),
+        phone = customer_info('phone')
+        )
+    
+    db.session.add(new_customer)
+    db.session.commit()
+    return jsonify({'message': 'New member added successfuly'}), 201
  
 def update_customer(customer_id):
     pass

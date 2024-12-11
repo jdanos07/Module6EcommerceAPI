@@ -1,50 +1,60 @@
+from app import db, Products, product_schema, products_schema
+from flask import jsonify, request
+from marshmallow import ValidationError
 def get_products():
-    pass
-    # workouts = Workouts.query.all()
-    # return workouts_schema.jsonify(workouts)
+    products = Products.query.all()
+    return products_schema.jsonify(products)
 
 def get_product(product_id):
-    pass
+    product = Products.query.filter_by(product_id).first()
+    return product_schema.jsonify(product)
 
 def add_product():
-    pass
-    # try:
-    #     workout_data = workout_schema.load(request.json)
-    # except ValidationError as e:
-    #     return jsonify(e.messages),400
+    try:
+        product_info = product_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages),400
 
-    # new_workout = Workouts(
-    #     calories_burned = workout_data['calories_burned'],
-    #     duration_minutes = workout_data['duration_minutes'],
-    #     date = workout_data['date']
-    #     )
-    # db.session.add(new_workout)
-    # db.session.commit()
-    # return jsonify({'message': 'New member added successfuly'}), 201
+    new_product = Products(
+        product_name = product_info['product_name'],
+        product_price = product_info['product_price'],
+        )
+    db.session.add(new_product)
+    db.session.commit()
+    return jsonify({'message': 'New member added successfuly'}), 201
  
 def update_product(product_id):
-    pass
-    # workout = Workouts.query.get_or_404(member_id, workout_id)
-    # try:
-    #     workout_data = workout_schema.load(request.json)
-    # except ValidationError as e:
-    #     return jsonify(e.messages, 400)
+    product = Products.query.get_or_404(product_id)
+    try:
+        product_data = product_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages, 400)
     
-    # workout.calories_burned = workout_data['calories_burned']
-    # workout.duration_minutes = workout_data['duration_minutes']
-    # workout.date = workout_data['date']
+    product.name = product_data['product_name']
+    product.price = product_data['product_price']
 
-    # db.session.commit()
-    # return jsonify({'message': 'Workout upated'}), 200
+    db.session.commit()
+    return jsonify({'message': 'Workout upated'}), 200
 
 def delete_product(product_id):
-    pass
-    # workout = Members.query.get_or_404(member_id, workout_id)
-    # db.session.delete(workout)
-    # db.session.commit()
-    # return jsonify({'message': 'Workout removed'}), 200
+    product = Products.query.get_or_404(product_id)
+    db.session.delete(product)
+    db.session.commit()
+    return jsonify({'message': 'Workout removed'}), 200
 
-def get_product_list(product_id):
-    pass
-    # workouts = Workouts.query.all()
-    # return workouts_schema.jsonify(workouts)
+def get_product_list():
+    try:
+        products = Products.query.all()
+
+        products_list = []
+        for product in products:
+            product_info = {
+                'id' : product.id,
+                'name' : product.name,
+                'price' : product.price
+            }
+            products_list.append(product_info)
+
+        return jsonify({'products': products_list}), 200
+    except ValidationError as e:
+        return jsonify(e.messages, 400)
