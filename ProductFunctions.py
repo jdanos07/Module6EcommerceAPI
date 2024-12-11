@@ -34,7 +34,7 @@ def update_product(product_id):
     product.price = product_data['product_price']
 
     db.session.commit()
-    return jsonify({'message': 'Workout upated'}), 200
+    return jsonify({'message': 'Produc5 upated'}), 200
 
 def delete_product(product_id):
     product = Products.query.get_or_404(product_id)

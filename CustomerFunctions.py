@@ -28,25 +28,24 @@ def add_customer():
  
 def update_customer(customer_id):
     pass
-    # workout = Workouts.query.get_or_404(member_id, workout_id)
-    # try:
-    #     workout_data = workout_schema.load(request.json)
-    # except ValidationError as e:
-    #     return jsonify(e.messages, 400)
+    customer = Customers.query.get_or_404(customer_id)
+    try:
+        customer_info = customer_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages, 400)
     
-    # workout.calories_burned = workout_data['calories_burned']
-    # workout.duration_minutes = workout_data['duration_minutes']
-    # workout.date = workout_data['date']
+    customer.name=db.customer_info['name']
+    customer.email=db.customer['email']
+    customer.phone=db.customer['phone']
 
-    # db.session.commit()
-    # return jsonify({'message': 'Workout upated'}), 200
+    db.session.commit()
+    return jsonify({'message': 'Customer upated'}), 200
 
-def delete_customer(customer_id):
-    pass
-    # workout = Members.query.get_or_404(member_id, workout_id)
-    # db.session.delete(workout)
-    # db.session.commit()
-    # return jsonify({'message': 'Workout removed'}), 200
+def delete_customer(customer_id): 
+    customer = Customer.query.get_or_404(customer_id)
+    db.session.delete(customer)
+    db.session.commit()
+    return jsonify({'message': 'Produc removed'}), 200
 
 def get_customer_account(customer_id):
     pass

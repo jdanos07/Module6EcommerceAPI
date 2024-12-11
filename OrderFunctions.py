@@ -1,9 +1,8 @@
 # Track(need), Retrieve(have), Place(have)
 
 def get_order_tracking(order_id):
-    pass
-    # workouts = Workouts.query.all()
-    # return workouts_schema.jsonify(workouts)
+    oWororderoao
+    return workouts_schema.jsonify(workouts)
 
 def get_order(order_id):
     pass
