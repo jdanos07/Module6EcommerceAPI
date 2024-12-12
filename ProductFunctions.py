@@ -1,12 +1,13 @@
-from app import db, Products, product_schema, products_schema
+from app import db, Products, product_schema, products_schema, app
 from flask import jsonify, request
 from marshmallow import ValidationError
+
 def get_products():
     products = Products.query.all()
     return products_schema.jsonify(products)
 
 def get_product(product_id):
-    product = Products.query.filter_by(product_id).first()
+    product = Products.query.get(product_id)
     return product_schema.jsonify(product)
 
 def add_product():
@@ -34,13 +35,13 @@ def update_product(product_id):
     product.price = product_data['product_price']
 
     db.session.commit()
-    return jsonify({'message': 'Produc5 upated'}), 200
+    return jsonify({'message': 'Product upated'}), 200
 
 def delete_product(product_id):
     product = Products.query.get_or_404(product_id)
     db.session.delete(product)
     db.session.commit()
-    return jsonify({'message': 'Workout removed'}), 200
+    return jsonify({'message': 'Product removed'}), 200
 
 def get_product_list():
     try:
